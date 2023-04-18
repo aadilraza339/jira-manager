@@ -1,4 +1,4 @@
-const ticketsController = require("../controller/tickets")
+const ticketsController = require("../controllers/tickets")
 const routes = require("express").Router();
 
 routes.use("/tickets", ticketsController.fetchIssues);
