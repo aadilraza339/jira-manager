@@ -43,8 +43,57 @@ const updateTicketsRecords = (req, res) => {
     })
 }
 
+const closeTicket = async (req, res) => {
+  try {
+    const comment = req.body?.comment;
+    const transitionData = {
+      transition: {
+        id: '31',// ID of the "Closed" transition.
+      }
+    }
+    const issueKey = req.params.id;
+    await axios.post(`${process.env.BASE_URL}/rest/api/3/issue/${issueKey}/transitions`, transitionData, {
+      headers: jiraRequestHeaders,
+    })
+    if (comment) {
+    
+      const updateData = {
+    
+        update: {
+          comment: [
+            {
+              add: {
+                body: comment,
+              },
+            },
+          ],
+        },
+      };
+      await axios.put(`${process.env.BASE_URL}/rest/api/2/issue/${issueKey}`, updateData, {
+        headers: jiraRequestHeaders,
+      })
+    }
+
+
+    res.status(200).send({
+      success: true,
+      message: "Successfully Close Ticket",
+    });
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(err.status || 500).send({
+      success: false,
+      message: err.message || "Internal Server Error",
+    });
+  }
+
+};
+
 
 
 module.exports = {
-  updateTicketsRecords
+  updateTicketsRecords,
+  closeTicket
 };
