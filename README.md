@@ -15,3 +15,8 @@ The code makes an API request to fetch all the tickets and stores them in the da
 
 #How it works:
 I am retrieving the ticket ID and comment from the request to change the status and add a comment. To move the ticket to the 'Closed' status, we need to specify the transition ID, which is '31'. This transition represents the action of closing the ticket. Additionally, I am making another API request to edit the ticket using the 'PUT' method to add the comment.
+
+#Task 3: Create a UI to show the tickets from the database.
+#How it works:
+I have created a React application for displaying the tickets as a card view. Also makes an API call to fetch the tickets from the backend.
+
