@@ -20,3 +20,6 @@ I am retrieving the ticket ID and comment from the request to change the status 
 #How it works:
 I have created a React application for displaying the tickets as a card view. Also makes an API call to fetch the tickets from the backend.
 
+#Task 4: Add a button to re-fetch or re-load new tickets if any from Jira and put them into the database
+#How it works:
+I have added a reload button to fetch updated responses from the API if any from Jira, and updating the database accordingly.
