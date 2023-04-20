@@ -16,6 +16,11 @@ const updateTicketsData = (ticket)=>{
 	)
 }
 
+const getTickets = ()=>{
+    return knex("tickets").select("*")
+}
+
 module.exports  = {
     updateTicketsData,
+    getTickets
 }

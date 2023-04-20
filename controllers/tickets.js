@@ -91,9 +91,27 @@ const closeTicket = async (req, res) => {
 
 };
 
+const fetchIssues = async (req, res) => {
+  try {
+    const arrayOfTickets = await query.getTickets()
+    res.status(200).send({
+      success: true,
+      data: arrayOfTickets,
+      message: "Successfully fetch Tickets",
+    });
+
+  } catch (err) {
+    res.status(err.status || 500).send({
+      success: false,
+      message: err.message || "Internal Server Error",
+    });
+  }
+}  
+
 
 
 module.exports = {
   updateTicketsRecords,
-  closeTicket
+  closeTicket,
+  fetchIssues
 };

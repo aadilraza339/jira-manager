@@ -5,4 +5,7 @@ routes.get("/tickets/reload", ticketsController.updateTicketsRecords);
 
 routes.put("/tickets/:id", ticketsController.closeTicket);
 
+routes.get("/tickets", ticketsController.fetchIssues);
+
+
 module.exports = routes;
