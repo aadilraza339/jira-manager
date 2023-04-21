@@ -2,17 +2,15 @@ const axios = require("axios");
 const query = require("../model/query")
 require("dotenv").config();
 
-const jiraRequestHeaders = {
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
   Authorization: `Basic ${Buffer.from(`${process.env.EMAIL}:${process.env.JIRA_AP_TOKEN}`).toString("base64")}`,
 };
 
 const updateTicketsRecords = (req, res) => {
   axios.get(`${process.env.BASE_URL}rest/agile/1.0/board/1/issue`, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...jiraRequestHeaders,
-    }
+    headers
   })
     .then(async (response) => {
       const issues = response.data.issues
@@ -53,7 +51,7 @@ const closeTicket = async (req, res) => {
     }
     const issueKey = req.params.id;
     await axios.post(`${process.env.BASE_URL}/rest/api/3/issue/${issueKey}/transitions`, transitionData, {
-      headers: jiraRequestHeaders,
+      headers,
     })
     if (comment) {
     
@@ -70,7 +68,7 @@ const closeTicket = async (req, res) => {
         },
       };
       await axios.put(`${process.env.BASE_URL}/rest/api/2/issue/${issueKey}`, updateData, {
-        headers: jiraRequestHeaders,
+        headers,
       })
     }
 
