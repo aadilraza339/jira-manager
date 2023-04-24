@@ -10,6 +10,9 @@ const headers = {
 
 const updateTicketsRecords = async(req, res) => {
   try {
+    let {
+      page = 1,
+  } = req.query;
    const response = await axios.get(`${process.env.BASE_URL}rest/agile/1.0/board/1/issue`, {
       headers
     })
@@ -25,9 +28,10 @@ const updateTicketsRecords = async(req, res) => {
       arrayOfTickets.push({ number, name, description, reporter, status, dueDate })
       await query.updateTicketsData({ number, name, description, reporter, status, dueDate })
     }
+    const tickets = await query.getTickets(page)
     res.status(200).send({
       success: true,
-      data: arrayOfTickets,
+      data: tickets,
       message: "Successfully fetch tickets",
     });
    
@@ -90,10 +94,16 @@ const closeTicket = async (req, res) => {
 
 const fetchIssues = async (req, res) => {
   try {
-    const arrayOfTickets = await query.getTickets()
+    let {
+      page = 1,
+  } = req.query;
+    const [totalItemCount] =  await query.getTotalCount()
+    const arrayOfTickets = await query.getTickets(page)
+
     res.status(200).send({
       success: true,
       data: arrayOfTickets,
+      totalItemCount,
       message: "Successfully fetch Tickets",
     });
 

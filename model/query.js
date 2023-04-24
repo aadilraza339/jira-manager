@@ -16,11 +16,22 @@ const updateTicketsData = (ticket)=>{
 	)
 }
 
-const getTickets = ()=>{
-    return knex("tickets").select("*")
+const getTickets = (currentPage)=>{
+    const itemsPerPage = 10; 
+    const offset = (currentPage - 1) * itemsPerPage;
+   return knex('tickets')
+  .select()
+  .limit(itemsPerPage)
+  .offset(offset)
 }
 
+const getTotalCount = ()=>{
+    return  knex('tickets')
+    .select()
+    .count("* as total")   
+}
 module.exports  = {
     updateTicketsData,
-    getTickets
+    getTickets,
+    getTotalCount
 }
