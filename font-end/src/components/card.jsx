@@ -11,11 +11,9 @@ function Card() {
     const [totalItems, setTotalItems] = useState(0);
 
 
-    const fetchTickets = async (page) => {
+    const fetchTickets = async () => {
 
         try {
-            console.log(page);
-            // const offset = (page || currentPage - 1) * itemsPerPage;
             const response = await axios.get(`http://localhost:3000/api/v1/tickets?page=${currentPage}`)
             const total = response.data.totalItemCount.total
             setTotalItems(total);
@@ -41,17 +39,7 @@ function Card() {
     }
 
     const handlePageChange = (pageNumber) => {
-        console.log(pageNumber);
         setCurrentPage(pageNumber);
-        // fetchTickets(pageNumber)
-    };
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % tickets.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
-        console.log(newOffset);
-        setCurrentPage(newOffset);
     };
     return (
         <>
@@ -70,7 +58,7 @@ function Card() {
                 </div>
             </div>
             {!tickets.length ? (
-                <div className="">Loaing</div>
+                <div className="loading">Loaing</div>
             )
                 :
                 <>
