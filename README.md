@@ -18,6 +18,10 @@ I am retrieving the ticket ID and comment from the request to change the status 
 
 #Task 3: Create a UI to show the tickets from the database.
 #How it works:
+1. cd font-end
+2. npm install
+3. npm start
+
 I have created a React application for displaying the tickets as a card view. Also makes an API call to fetch the tickets from the backend.
 
 #Task 4: Add a button to re-fetch or re-load new tickets if any from Jira and put them into the database
