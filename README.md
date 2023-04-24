@@ -18,7 +18,7 @@ I am retrieving the ticket ID and comment from the request to change the status 
 
 #Task 3: Create a UI to show the tickets from the database.
 #How it works:
-1. cd font-end
+1. cd front-end
 2. npm install
 3. npm start
 
