@@ -8,40 +8,47 @@ const headers = {
   Authorization: `Basic ${Buffer.from(`${process.env.EMAIL}:${process.env.JIRA_AP_TOKEN}`).toString("base64")}`,
 };
 
-const updateTicketsRecords = async(req, res) => {
+const fetchUpdateTickets = async (page) => {
+  const jiraApiPage = (page - 1) * 10;
+  const response = await axios.get(`${process.env.BASE_URL}rest/agile/1.0/board/1/issue?startAt=${jiraApiPage}&maxResults=10`, {
+    headers
+  })
+  const issues = response.data.issues
+  const arrayOfTickets = []
+  for (let issue of issues) {
+    const number = issue.key;
+    const name = issue.fields.summary;
+    const description = issue.fields.description;
+    const reporter = issue.fields.reporter.displayName;
+    const status = issue.fields.status.name;
+    const dueDate = issue.fields.duedate;
+    arrayOfTickets.push({ number, name, description, reporter, status, dueDate })
+    await query.updateTicketsData({ number, name, description, reporter, status, dueDate })
+  }
+  return [response.data.total, arrayOfTickets]
+}
+
+const updateTicketsRecords = async (req, res) => {
   try {
     let {
       page = 1,
-  } = req.query;
-   const response = await axios.get(`${process.env.BASE_URL}rest/agile/1.0/board/1/issue`, {
-      headers
-    })
-    const issues = response.data.issues
-    const arrayOfTickets = []
-    for (let issue of issues) {
-      const number = issue.key;
-      const name = issue.fields.summary;
-      const description = issue.fields.description;
-      const reporter = issue.fields.reporter.displayName;
-      const status = issue.fields.status.name;
-      const dueDate = issue.fields.duedate;
-      arrayOfTickets.push({ number, name, description, reporter, status, dueDate })
-      await query.updateTicketsData({ number, name, description, reporter, status, dueDate })
-    }
-    const tickets = await query.getTickets(page)
+    } = req.query;
+
+    const [total,arrayOfTickets] = await fetchUpdateTickets(page)
     res.status(200).send({
       success: true,
-      data: tickets,
+      data: arrayOfTickets,
+      total,
       message: "Successfully fetch tickets",
     });
-   
+
   } catch (error) {
     res.status(err.status || 500).send({
       success: false,
       message: err.message || "Internal Server Error",
     });
   }
-  
+
 }
 
 const closeTicket = async (req, res) => {
@@ -57,9 +64,9 @@ const closeTicket = async (req, res) => {
       headers,
     })
     if (comment) {
-    
+
       const updateData = {
-    
+
         update: {
           comment: [
             {
@@ -96,14 +103,19 @@ const fetchIssues = async (req, res) => {
   try {
     let {
       page = 1,
-  } = req.query;
-    const [totalItemCount] =  await query.getTotalCount()
-    const arrayOfTickets = await query.getTickets(page)
-
+    } = req.query;
+    const response = await axios.get(`${process.env.BASE_URL}rest/agile/1.0/board/1/issue`, {
+      headers
+    })
+    let arrayOfTickets = await query.getTickets(page)
+    if (!arrayOfTickets.length) {
+       [total,arrayOfTickets] = await fetchUpdateTickets(page)
+    }
+  
     res.status(200).send({
       success: true,
       data: arrayOfTickets,
-      totalItemCount,
+      total: response.data.total,
       message: "Successfully fetch Tickets",
     });
 
@@ -113,8 +125,7 @@ const fetchIssues = async (req, res) => {
       message: err.message || "Internal Server Error",
     });
   }
-}  
-
+}
 
 
 module.exports = {

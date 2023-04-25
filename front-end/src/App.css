@@ -117,7 +117,7 @@ h1 {
   border-color: #ccc;
 }
 
-.loading {
+.loading, .empty {
   text-align: center;
 }
 @media only screen and (max-width: 600px) {

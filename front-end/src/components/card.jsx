@@ -9,15 +9,17 @@ function Card() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-
+    const [loading, setLoading] = useState(false)
 
     const fetchTickets = async () => {
 
         try {
+            setLoading(true)
             const response = await axios.get(`http://localhost:3000/api/v1/tickets?page=${currentPage}`)
-            const total = response.data.totalItemCount.total
+            const total = response.data.total
             setTotalItems(total);
             setTickets(response.data.data)
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -30,6 +32,8 @@ function Card() {
         setRefresh(true)
         try {
             const response = await axios.get(`http://localhost:3000/api/v1/tickets/reload?page=${currentPage}`)
+            const total = response.data.total
+            setTotalItems(total);
             setTickets(response.data.data)
             setRefresh(false)
         } catch (error) {
@@ -57,66 +61,68 @@ function Card() {
 
                 </div>
             </div>
-            {!tickets.length ? (
-                <div className="loading">Loaing</div>
+            {loading? (
+               
+                <div className="loading">Loading...</div>
             )
                 :
-                <>
-                    <div className="tickets-board">
+                !tickets.length ?  <div className="empty">Empty</div> :
+                    <>
+                        <div className="tickets-board">
 
-                        <div className="card-column">
-                            <div className="card-label">TO Do</div>
-                            {tickets.map((ticket) => {
-                                return ticket.status === "To Do" ? (
-                                    <div className="card">
-                                        <div className="card-title">
-                                            {ticket.name}
-                                        </div>
-                                        <div className="card-id">{ticket.number}</div>
+                            <div className="card-column">
+                                <div className="card-label">TO Do</div>
+                                {tickets.map((ticket) => {
+                                    return ticket.status === "To Do" ? (
+                                        <div className="card">
+                                            <div className="card-title">
+                                                {ticket.name}
+                                            </div>
+                                            <div className="card-id">{ticket.number}</div>
 
-                                    </div>)
-                                    : null
-                            }
-                            )}
-                        </div>
-
-                        <div className="card-column">
-                            <div className="card-label">In Progress</div>
-                            {tickets.map((ticket) => {
-                                return ticket.status === "In Progress" ? (
-                                    <div className="card">
-                                        <div className="card-title">
-                                            {ticket.name}
-                                        </div>
-                                        <div className="card-id">{ticket.number}</div>
-
-                                    </div>)
-                                    : null
-                            }
-                            )}
-                        </div>
-                        <div className="card-column">
-                            <div className="flex-row">
-                                <input type="checkbox" name="" id="" checked />
-                                <div className="checkbox-label">Done</div>
-
+                                        </div>)
+                                        : null
+                                }
+                                )}
                             </div>
-                            {tickets.map((ticket) => {
-                                return ticket.status === "Done" ? (
-                                    <div className="card">
-                                        <div className="card-title">
-                                            {ticket.name}
-                                        </div>
-                                        <div className="card-id">{ticket.number}</div>
 
-                                    </div>)
-                                    : null
-                            }
-                            )}
+                            <div className="card-column">
+                                <div className="card-label">In Progress</div>
+                                {tickets.map((ticket) => {
+                                    return ticket.status === "In Progress" ? (
+                                        <div className="card">
+                                            <div className="card-title">
+                                                {ticket.name}
+                                            </div>
+                                            <div className="card-id">{ticket.number}</div>
+
+                                        </div>)
+                                        : null
+                                }
+                                )}
+                            </div>
+                            <div className="card-column">
+                                <div className="flex-row">
+                                    <input type="checkbox" name="" id="" checked />
+                                    <div className="checkbox-label">Done</div>
+
+                                </div>
+                                {tickets.map((ticket) => {
+                                    return ticket.status === "Done" ? (
+                                        <div className="card">
+                                            <div className="card-title">
+                                                {ticket.name}
+                                            </div>
+                                            <div className="card-id">{ticket.number}</div>
+
+                                        </div>)
+                                        : null
+                                }
+                                )}
+                            </div>
                         </div>
-                    </div>
 
-                </>
+                    </>
             }
             <Pagination
                 activePage={currentPage}
