@@ -11,6 +11,7 @@ function Card() {
     const [totalItems, setTotalItems] = useState(0);
     const [loading, setLoading] = useState(false)
 
+    // Function to fetch tickets from the API
     const fetchTickets = async () => {
 
         try {
@@ -25,9 +26,13 @@ function Card() {
         }
 
     }
+
+    // Load tickets on initial mount and when currentPage changes
     useEffect(() => {
         fetchTickets()
     }, [currentPage])
+
+    // Function to refresh tickets
     const refreshTickets = async () => {
         setRefresh(true)
         try {
@@ -42,6 +47,7 @@ function Card() {
         }
     }
 
+    // Function to handle page change
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -61,13 +67,14 @@ function Card() {
 
                 </div>
             </div>
+            {/* Show loading spinner if tickets are being fetched */}
             {loading? (
-               
                 <div className="loading">Loading...</div>
             )
                 :
+                 // Show "Empty" message if there are no tickets to display
                 !tickets.length ?  <div className="empty">Empty</div> :
-                    <>
+                    // Render tickets board if there are tickets to display
                         <div className="tickets-board">
 
                             <div className="card-column">
@@ -121,8 +128,6 @@ function Card() {
                                 )}
                             </div>
                         </div>
-
-                    </>
             }
             <Pagination
                 activePage={currentPage}

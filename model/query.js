@@ -25,13 +25,7 @@ const getTickets = (currentPage)=>{
   .offset(offset)
 }
 
-const getTotalCount = ()=>{
-    return  knex('tickets')
-    .select()
-    .count("* as total")   
-}
 module.exports  = {
     updateTicketsData,
     getTickets,
-    getTotalCount
 }
