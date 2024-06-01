@@ -1,6 +1,6 @@
 .sub-header {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   margin: 0 auto;
   width: 60%;
@@ -56,17 +56,23 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px;
 }
 .reload-box span {
   display: flex;
   justify-content: center;
   border: 1px solid gray;
-  padding: 3px 5px;
+  padding: 5px 5px;
   border-radius: 4px;
   cursor: pointer;
 }
-
+.card .form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card .form-group select {
+  width: calc(100% - 143px);
+}
 .reload-box img {
   display: flex;
   justify-content: center;

@@ -45,7 +45,8 @@ const updateTicketsRecords = async (req, res) => {
       message: "Successfully fetch tickets",
     });
 
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
     res.status(err.status || 500).send({
       success: false,
       message: err.message || "Internal Server Error",
@@ -58,9 +59,10 @@ const closeTicket = async (req, res) => {
   try {
     // Extract the comment from the request body, if any
     const comment = req.body?.comment;
+
     const transitionData = {
       transition: {
-        id: '31',// ID of the "Closed" transition.
+        id: req.params.transitionId
       }
     }
     const issueKey = req.params.id;
@@ -127,6 +129,7 @@ const fetchIssues = async (req, res) => {
     });
 
   } catch (err) {
+    console.log(err);
     res.status(err.status || 500).send({
       success: false,
       message: err.message || "Internal Server Error",
@@ -135,8 +138,39 @@ const fetchIssues = async (req, res) => {
 }
 
 
+const createTicket = async (req, res) => {
+  const { summary, description, issueType } = req.body;
+
+  if (!summary || !description || !issueType) {
+      return res.status(400).json({ error: 'Missing required fields: summary, description, issueType' });
+  }
+
+  try {
+      const response = await axios.post(`${process.env.BASE_URL}rest/api/2/issue`, {
+          fields: {
+              project: {
+                  key: 'KAN'
+              },
+              summary: summary,
+              description: description,
+              issuetype: {
+                  name: issueType
+              }
+          }
+      }, {
+          headers
+      });
+
+      res.status(201).json({ message: 'Ticket created successfully', data: response.data });
+  } catch (error) {
+      console.error('Error creating JIRA ticket:', error);
+      res.status(500).json({ error: 'Failed to create ticket' });
+  }
+};
+
 module.exports = {
   updateTicketsRecords,
   closeTicket,
-  fetchIssues
+  fetchIssues,
+  createTicket
 };
