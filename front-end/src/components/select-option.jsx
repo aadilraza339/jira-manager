@@ -7,7 +7,7 @@ function SelectOption({ticket,refreshTickets,customOption}) {
     const fetchTickets = async (e) => {
 
         try {
-            await axios.put(`http://localhost:3000/api/v1/tickets/${ticket.number}/${e.target.value}`)
+            await axios.put(`https://jira-manager-ecze-1bl7fzj0l-aadilraza339s-projects.vercel.app/api/v1/tickets/${ticket.number}/${e.target.value}`)
             setmoveTo({ number: ticket.number, name: e.target.value })
             refreshTickets()
         } catch (error) {

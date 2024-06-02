@@ -11,7 +11,7 @@ const CreateTicketForm = ({handleCreateTicket, refreshTickets}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/api/v1/create-ticket', {
+            await axios.post('https://jira-manager-ecze-1bl7fzj0l-aadilraza339s-projects.vercel.app/api/v1/create-ticket', {
                 summary,
                 description,
                 issueType,

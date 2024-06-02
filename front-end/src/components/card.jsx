@@ -19,7 +19,7 @@ function Card() {
 
         try {
             setLoading(true)
-            const response = await axios.get(`http://localhost:3000/api/v1/tickets?page=${currentPage}`)
+            const response = await axios.get(`https://jira-manager-ecze-1bl7fzj0l-aadilraza339s-projects.vercel.app/api/v1/tickets?page=${currentPage}`)
             const total = response.data.total
             setTotalItems(total);
             setTickets(response.data.data)
@@ -39,7 +39,7 @@ function Card() {
     const refreshTickets = async () => {
         setRefresh(true)
         try {
-            const response = await axios.get(`http://localhost:3000/api/v1/tickets/reload?page=${currentPage}`)
+            const response = await axios.get(`https://jira-manager-ecze-1bl7fzj0l-aadilraza339s-projects.vercel.app/api/v1/tickets/reload?page=${currentPage}`)
             const total = response.data.total
             setTotalItems(total);
             setTickets(response.data.data)

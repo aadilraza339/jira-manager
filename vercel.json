@@ -6,5 +6,6 @@
             "use": "@vercel/node"
         }
     ],
-    "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+    "ignore": ["front-end"]
 }
